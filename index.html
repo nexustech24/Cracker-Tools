@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morse Code Translator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, label {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        textarea {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+            resize: none;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Morse Code Translator</h1>
+
+    <!-- Home Screen -->
+    <div id="homeScreen">
+        <label>Select Translation Type:</label>
+        <button onclick="showTextToMorse()">Text to Morse Code</button>
+        <button onclick="showMorseToText()">Morse Code to Text</button>
+    </div>
+
+    <!-- Translation Screen -->
+    <div id="translationScreen" class="hidden">
+        <label id="inputLabel">Input Text:</label>
+        <textarea id="inputText"></textarea>
+        
+        <label>Output Text:</label>
+        <textarea id="outputText" readonly></textarea>
+        
+        <button onclick="translate()">Translate</button>
+        <button onclick="showHomeScreen()">Back</button>
+    </div>
+</div>
+
+<script>
+    const morseCodeDict = {
+        'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.',
+        'F': '..-.', 'G': '--.', 'H': '....', 'I': '..', 'J': '.---',
+        'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---',
+        'P': '.--.', 'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-',
+        'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-', 'Y': '-.--',
+        'Z': '--..', '0': '-----', '1': '.----', '2': '..---', '3': '...--',
+        '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..',
+        '9': '----.', '.': '.-.-.-', ',': '--..--', '?': '..--..', "'": '.----.',
+        '!': '-.-.--', '/': '-..-.', '(': '-.--.', ')': '-.--.-', '&': '.-...',
+        ':': '---...', ';': '-.-.-.', '=': '-...-', '+': '.-.-.', '-': '-....-',
+        '_': '..--.-', '"': '.-..-.', '$': '...-..-', '@': '.--.-.', ' ': '/'
+    };
+    const reverseMorseCodeDict = Object.fromEntries(
+        Object.entries(morseCodeDict).map(([k, v]) => [v, k])
+    );
+
+    function showTextToMorse() {
+        document.getElementById("homeScreen").classList.add("hidden");
+        document.getElementById("translationScreen").classList.remove("hidden");
+        document.getElementById("inputLabel").textContent = "Input Text:";
+    }
+
+    function showMorseToText() {
+        document.getElementById("homeScreen").classList.add("hidden");
+        document.getElementById("translationScreen").classList.remove("hidden");
+        document.getElementById("inputLabel").textContent = "Input Morse Code:";
+    }
+
+    function showHomeScreen() {
+        document.getElementById("translationScreen").classList.add("hidden");
+        document.getElementById("homeScreen").classList.remove("hidden");
+        document.getElementById("inputText").value = '';
+        document.getElementById("outputText").value = '';
+    }
+
+    function translate() {
+        const inputText = document.getElementById("inputText").value.trim().toUpperCase();
+        const outputText = document.getElementById("outputText");
+        outputText.value = '';
+
+        if (document.getElementById("inputLabel").textContent === "Input Text:") {
+            outputText.value = inputText.split('').map(char => 
+                morseCodeDict[char] || char
+            ).join(' ');
+        } else {
+            outputText.value = inputText.split(' ').map(code => 
+                reverseMorseCodeDict[code] || code
+            ).join('');
+        }
+    }
+</script>
+
+</body>
+</html>
